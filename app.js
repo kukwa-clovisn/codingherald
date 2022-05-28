@@ -38,9 +38,9 @@ const loginRoute = require('./routes/login')
 const dataRoute = require('./routes/userData')
 
 // getting Routes
-app.use('/login', loginRoute);
-app.use('/register', registerRoute);
-app.use('/user', dataRoute);
+app.use('/api/login', loginRoute);
+app.use('/api/register', registerRoute);
+app.use('/api/user', dataRoute);
 
 // exporting the app.
 module.exports = app;

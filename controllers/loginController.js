@@ -17,6 +17,8 @@ module.exports = {
                token
           ] = authHeader.split(" ");
 
+          console.log(req.body);
+
           if (token === null) {
                return res.status(401).json({
                     msg: "Unauthorized user!"
@@ -46,7 +48,7 @@ module.exports = {
      },
      post: (req, res) => {
           let findUser = capitalizeUserName(req.body.username);
-
+          console.log(req.body)
           userModel.findOne({
                username: findUser
           }, async (err, data) => {
@@ -81,6 +83,7 @@ module.exports = {
 
                     return res.status(200).json({
                          msg: "log in successful",
+                         id: data._id,
                          token: jwt
                     })
 
