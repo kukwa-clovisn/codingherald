@@ -1,10 +1,10 @@
 const userModel = require("../models/users");
 
-// const bcrypt = require("bcrypt");
-
 const hashFunc = require('../middlewares/hash');
-const userToken = require('../utils/jwt')
+
 const capitalizeUserName = require('../middlewares/capitalize');
+
+const userToken = require('../utils/jwt')
 
 const {
      validationResult
@@ -30,6 +30,17 @@ module.exports = {
 
           let newEmail = req.body.email;
 
+          console.log(req.body)
+
+          if (req.body.password.length < 4) {
+               console.log(
+                    'invalid password'
+               )
+               return res.status(401).json({
+                    msg: "invalid password"
+               })
+          }
+
           let newUser = capitalizeUserName(req.body.username);
 
           /**
@@ -40,49 +51,50 @@ module.exports = {
                },
                async (err, data) => {
                     try {
-                         if (err) return res.status(403).json(err);
+                         if (err) return res.status(401).json(err);
 
-                         if (data) {
+                         if (data) return res.status(403).json({
+                              msg: ` user ${req.body.username} already has an account.`
+                         });
 
-                              return res.status(403).json({
-                                   msg: ` user ${req.body.username} already has an account.`
-                              });
-                         }
                          /**
                           * checking if a user already exist with the same email
                           */
-                         await userModel.findOne({
+                         userModel.findOne({
                               email: newEmail
                          }, async (err, data) => {
                               try {
 
-                                   if (err) return res.status(403).json(err);
+                                   if (err) return res.status(401);
 
-                                   if (data) return res.status(401).json({
+                                   if (data) return res.status(403).json({
                                         msg: `user email ${req.body.email} already has an account.`
-                                   })
 
-                                   // capitalizing the username
-                                   let registeredName = capitalizeUserName(req.body.username);
+                                   })
 
                                    /**
                                     * hashing password
                                     */
 
                                    let userKey = await hashFunc(req.body.password);
+
+                                   /**
+                                    * creating a unigue token for every signed up user
+                                    */
+
                                    let refreshToken = userToken.createUserRefreshToken(req.body);
 
                                    // defining user to be stored in database
+
                                    let user = {
-                                        username: registeredName,
+                                        username: newUser,
                                         email: req.body.email,
                                         password: userKey,
-                                        token: refreshToken,
-                                        todos: []
+                                        token: refreshToken
                                    }
-                                   console.log(user)
+
                                    //     storing user in database
-                                   // await userModel.create(user);
+                                   await userModel.create(user);
 
                                    const request = mailjet
                                         .post("send", {
@@ -116,23 +128,14 @@ module.exports = {
                                              console.log(err.statusCode)
                                         })
 
-                                   /**
-                                    * return a response with the user data
-                                    */
-                                   res.json({
-                                        msg: "user successfully registered. signup successful",
-                                        data: response,
-                                   });
 
-                                   return console.log("user:", user);
                               } catch (err) {
 
-                                   console.log(err)
                                    return res.status(403).json(err);
                               }
-                         })
+                         }).select('-password')
                     } catch (err) {
-                         console.log(err)
+                         return err
                     }
 
 
