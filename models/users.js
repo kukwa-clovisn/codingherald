@@ -17,10 +17,11 @@ const userSchema = new mongoose.Schema({
           type: String,
           required: true
      },
-     userImage: String,
-     profileImage: String,
-     todos: Array,
-     BMI: Array
+     token: {
+          type: String,
+          required: true
+     },
+     todos: Array
 }, {
      collection: 'clients'
 })
