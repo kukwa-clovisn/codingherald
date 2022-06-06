@@ -5,10 +5,6 @@ const createUserToken = (data) => {
                id: data.id,
                username: data.username,
                email: data.email,
-               profileImg: data.profileImg,
-               userImage: data.userImage,
-               todos: data.todos,
-               BMI: data.BMI
           },
           process.env.user_login_token, {
                expiresIn: process.env.tokenLife,
@@ -28,16 +24,17 @@ const createUserRefreshToken = (data) => {
 
 const verifyUserToken = async (userToken) => {
      try {
-          jwt.verify(userToken, process.env.user_login_token, (err, data) => {
+          jwt.verify(userToken, process.env.user_login_refresh_token, (err, data) => {
                if (err) {
                     return res.status(500).json(err)
                }
-               console.log(data)
+               if (!data) return res.status(401);
+
                return data;
           })
 
      } catch (err) {
-          console.log(err);
+          return err;
      }
 }
 

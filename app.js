@@ -33,14 +33,12 @@ app.use(
 );
 
 //  Route paths
-const registerRoute = require('./routes/register')
-const loginRoute = require('./routes/login')
-const dataRoute = require('./routes/userData')
+const urlRoute = require('./routes/url')
+const uploadRoute = require('./routes/upload')
 
 // getting Routes
-app.use('/api/login', loginRoute);
-app.use('/api/register', registerRoute);
-app.use('/api/user', dataRoute);
+app.use('/api/url', urlRoute);
+app.use('/api/upload', uploadRoute);
 
 if (process.env.NODE_ENV === 'production') {
      app.use(express.static(__dirname + '/public/'));
