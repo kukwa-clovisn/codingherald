@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkportfolio"]=self["webpackChunkportfolio"]||[]).push([[663],{8660:function(n,o,r){r.r(o),r.d(o,{default:function(){return l}});var a=r(6252);const e=n=>((0,a.dD)("data-v-62627945"),n=n(),(0,a.Cn)(),n),t={id:"main"},i=e((()=>(0,a._)("h1",null,"comming soon....",-1))),s=[i];function u(n,o,r,e,i,u){return(0,a.wg)(),(0,a.iD)("main",t,s)}var c={name:"imageCompressor"},d=r(3744);const f=(0,d.Z)(c,[["render",u],["__scopeId","data-v-62627945"]]);var l=f}}]);
+//# sourceMappingURL=imageCompressor.0ee8e669.js.map
